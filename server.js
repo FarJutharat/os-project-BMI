@@ -1,13 +1,19 @@
-const http = require('http')
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express')
+const swaggerDoc = require('./view/swagger.json')
 
-const port = 80
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
-const server = http.createServer((request, response) => {
-  response.writeHead(200, {'Content-Type': 'text/plain'})
-  response.write('Hello World\n')
-  response.end('Version: ' + process.env.NODE_VERSION + '\n')
-})
+var port = process.env.port || 3030;
 
-server.listen(port)
+app.use('/', require('./controller/index'));
+app.use('/',swaggerUi.serve,swaggerUi.setup(swaggerDoc));
 
-console.log(`Server running at http://localhost: ${port}`)
+app.listen(port, function () {
+    console.log('Starting node.js on port ' + port);
+    console.log('[Swagger] http://localhost:'+port+'/')
+});
+
