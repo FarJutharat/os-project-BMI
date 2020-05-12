@@ -5,6 +5,7 @@ const requests = require('../model/handle')
 app.post('/BMI',async(req,res)=>{
     try{
          var bmi = await new requests().BMIreq(req.body)
+         res.status(200);
          res.json(bmi);
     }
      catch(error){
